@@ -1,0 +1,17 @@
+# SAM template for CodeBuild
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: A simple AWS Lambda for searching through videogames
+Resources:
+  GetBooksFx:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: target/postRecords-1.0-SNAPSHOT.jar
+      Handler: com.revature.get_records.PostRecordsHandler
+      Runtime: java8.al2
+      Description: Java function
+      MemorySize: 256
+      Timeout: 30
+      Tracing: Active
+      Policies:
+#        - arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess
