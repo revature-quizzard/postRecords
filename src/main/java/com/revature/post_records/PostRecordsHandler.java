@@ -22,7 +22,7 @@ public class PostRecordsHandler implements RequestHandler<APIGatewayProxyRequest
 
         logger.log("RECEIVED EVENT: " + apiGatewayProxyRequestEvent);
 
-        Records newRecords =mapper.fromJson(apiGatewayProxyRequestEvent.getBody(), Records.class);
+        Records newRecords = mapper.fromJson(apiGatewayProxyRequestEvent.getBody(), Records.class);
 
         recordRepo.addRecord(newRecords);
         APIGatewayProxyResponseEvent responseEvent = new APIGatewayProxyResponseEvent();
