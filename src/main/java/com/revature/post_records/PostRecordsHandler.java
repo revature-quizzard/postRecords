@@ -40,12 +40,20 @@ public class PostRecordsHandler implements RequestHandler<APIGatewayProxyRequest
 
         for(Player p: newRecords.getPlayerList()){
             User newUser = userRepo.getUserById(p.getId());
+            logger.log("Modifying player: " + newUser);
             if(newUser!=null) {
+                logger.log("Player earned: " + p.getPoints() + "points. Adding to " + newUser.getPoints());
                 newUser.setPoints(newUser.getPoints() + p.getPoints());
-                if (p.getPlacing() == 1)
+                if (p.getPlacing() == 1) {
+                    logger.log("Setting wins from " + newUser.getWins());
                     newUser.setWins(newUser.getWins() + 1);
-                else
+                    logger.log("Wins are now: " + newUser.getWins());
+                }
+                else {
+                    logger.log("Setting losses from " + newUser.getWins());
                     newUser.setLosses(newUser.getLosses() + 1);
+                    logger.log("Losses are now: " + newUser.getWins());
+                }
 
                 newUser.getGameRecords().add(newRecords.getRecordId());
                 userRepo.updateUser(newUser);
