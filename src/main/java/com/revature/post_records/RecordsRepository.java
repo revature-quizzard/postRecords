@@ -1,15 +1,27 @@
 package com.revature.post_records;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.http.apache.ApacheHttpClient;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 public class RecordsRepository {
-    private final DynamoDBMapper dbReader;
+    private final DynamoDbTable<Records> recordTable;
 
-    public RecordsRepository() { dbReader = new DynamoDBMapper(AmazonDynamoDBClientBuilder.defaultClient()); }
+    public RecordsRepository() {
+        DynamoDbClient db = DynamoDbClient.builder()
+            .httpClient(ApacheHttpClient.create())
+            .build();
+
+        DynamoDbEnhancedClient dbClient = DynamoDbEnhancedClient.builder()
+                .dynamoDbClient(db)
+                .build();
+
+        recordTable = dbClient.table("Records", TableSchema.fromBean(Records.class));
+    }
 
     public void addRecord(Records newRecord){
-        dbReader.save(newRecord, new DynamoDBSaveExpression());
+        recordTable.putItem(newRecord);
     }
 }
