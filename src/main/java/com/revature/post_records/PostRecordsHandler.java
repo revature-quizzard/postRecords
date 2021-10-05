@@ -14,7 +14,15 @@ import java.util.Map;
 public class PostRecordsHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private static final Gson mapper = new GsonBuilder().setPrettyPrinting().create();
-    private final RecordsRepository recordRepo = new RecordsRepository();
+    private final RecordsRepository recordRepo;
+
+    public PostRecordsHandler(){
+        recordRepo = new RecordsRepository();
+    }
+
+    public PostRecordsHandler(RecordsRepository recordRepo) {
+        this.recordRepo = recordRepo;
+    }
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent, Context context) {
