@@ -15,7 +15,7 @@ public class Records {
 
     private List<Player> playerList;
 
-    private boolean winner;
+    private String winner;
 
     private String datePlayed;
 
