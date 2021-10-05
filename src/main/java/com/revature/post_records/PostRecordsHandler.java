@@ -9,19 +9,23 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PostRecordsHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private static final Gson mapper = new GsonBuilder().setPrettyPrinting().create();
     private final RecordsRepository recordRepo;
+    private final UserRepository userRepo;
 
     public PostRecordsHandler(){
         recordRepo = new RecordsRepository();
+        userRepo = new UserRepository();
     }
 
-    public PostRecordsHandler(RecordsRepository recordRepo) {
+    public PostRecordsHandler(RecordsRepository recordRepo, UserRepository userRepo) {
         this.recordRepo = recordRepo;
+        this.userRepo = userRepo;
     }
 
     @Override
@@ -32,11 +36,22 @@ public class PostRecordsHandler implements RequestHandler<APIGatewayProxyRequest
 
         Records newRecords = mapper.fromJson(apiGatewayProxyRequestEvent.getBody(), Records.class);
 
-        for(Player p: newRecords.getPlayerList()){
-            logger.log(p.toString());
-        }
-
         recordRepo.addRecord(newRecords);
+
+        for(Player p: newRecords.getPlayerList()){
+            User newUser = userRepo.getUserById(p.getId());
+            if(newUser!=null) {
+                newUser.setPoints(newUser.getPoints() + p.getPoints());
+                if (p.getPlacing() == 1)
+                    newUser.setWins(newUser.getWins() + 1);
+                else
+                    newUser.setLosses(newUser.getLosses() + 1);
+
+                newUser.getGameRecords().add(newRecords.getRecordId());
+                userRepo.updateUser(newUser);
+            }
+        }
+        
         APIGatewayProxyResponseEvent responseEvent = new APIGatewayProxyResponseEvent();
         Map<String, String> headers = new HashMap<>();
         headers.put("Access-Control-Allow-Headers", "Content-Type,X-Amz-Date,Authorization");
