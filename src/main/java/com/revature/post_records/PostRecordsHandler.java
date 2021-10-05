@@ -32,6 +32,10 @@ public class PostRecordsHandler implements RequestHandler<APIGatewayProxyRequest
 
         Records newRecords = mapper.fromJson(apiGatewayProxyRequestEvent.getBody(), Records.class);
 
+        for(Player p: newRecords.getPlayerList()){
+            logger.log(p.toString());
+        }
+
         recordRepo.addRecord(newRecords);
         APIGatewayProxyResponseEvent responseEvent = new APIGatewayProxyResponseEvent();
         Map<String, String> headers = new HashMap<>();
