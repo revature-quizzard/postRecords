@@ -11,7 +11,6 @@ import java.util.List;
 @DynamoDbBean
 public class Records {
 
-
     private String recordId;
 
     private List<Player> playerList;

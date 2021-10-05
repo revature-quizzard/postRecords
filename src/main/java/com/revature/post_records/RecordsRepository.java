@@ -6,6 +6,8 @@ import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
+import java.util.UUID;
+
 public class RecordsRepository {
     private final DynamoDbTable<Records> recordTable;
 
@@ -22,6 +24,8 @@ public class RecordsRepository {
     }
 
     public void addRecord(Records newRecord){
+        UUID uuid = UUID.randomUUID();
+        newRecord.setRecordId(uuid.toString());
         recordTable.putItem(newRecord);
     }
 }
