@@ -24,7 +24,7 @@ public class Records {
     private boolean winner;
 
     @DynamoDBAttribute
-    private Date datePlayed;
+    private String datePlayed;
 
     @DynamoDBAttribute
     private List<Card> cardList;
