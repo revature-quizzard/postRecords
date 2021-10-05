@@ -14,4 +14,4 @@ Resources:
       Timeout: 30
       Tracing: Active
       Policies:
-#        - arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
