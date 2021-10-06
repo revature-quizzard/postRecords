@@ -51,7 +51,7 @@ public class PostRecordsHandler implements RequestHandler<APIGatewayProxyRequest
                 userRepo.updateUser(newUser);
             }
         }
-        
+
         APIGatewayProxyResponseEvent responseEvent = new APIGatewayProxyResponseEvent();
         Map<String, String> headers = new HashMap<>();
         headers.put("Access-Control-Allow-Headers", "Content-Type,X-Amz-Date,Authorization");
