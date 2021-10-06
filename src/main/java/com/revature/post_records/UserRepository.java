@@ -40,8 +40,13 @@ public class UserRepository {
         Expression filter = Expression.builder().expression("#a = :b") .putExpressionName("#a", "id") .putExpressionValue(":b", val).build();
         ScanEnhancedRequest request = ScanEnhancedRequest.builder().filterExpression(filter).build();
 
-        return userTable.scan(request).stream().findFirst().orElseThrow(ResourceNotFoundException::new).items().get(0);
-
+        try {
+            return userTable.scan(request).stream().findFirst().orElseThrow(ResourceNotFoundException::new).items().get(0);
+        } catch (Exception e){
+            System.out.println(e);
+        }
+        System.out.println("EXCEPTION: Returning null");
+        return null;
     }
 
     public User updateUser(User user){
